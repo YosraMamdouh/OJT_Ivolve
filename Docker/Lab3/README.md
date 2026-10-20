@@ -1,12 +1,11 @@
-# Lab 3: Containerizing Java Application with Docker
+# Lab 3: Creating a Docker Image for a Java Application
 
-This lab demonstrates how to containerize the Calculator Java application using Docker with a multi-stage build.
+This lab explores two different approaches for containerizing a Java Maven application, focusing on security (non-root user), image sizes, and multi-stage builds.
 
-## Prerequisites
-- Docker installed and running
+---
 
-## Steps to Build and Run
+## Part 1: Build Inside Docker
 
-1. **Build the Docker Image (from the root directory):**
+1. **Build the Image (`app1`):**
    ```bash
-   docker build -t calculator-app:v1 -f Docker/Lab3/Dockerfile .
+   docker build -t app1 -f Docker/Lab3/Dockerfile.part1 .
