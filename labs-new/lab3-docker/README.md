@@ -11,13 +11,10 @@ Two approaches are compared: building the app **inside** Docker, and building it
 | [`Dockerfile`](./Dockerfile) | Part 1: build inside Docker (Maven image, Java 17) |
 | [`Dockerfile.local`](./Dockerfile.local) | Part 2: copy the locally built JAR into a Java 17 JRE image |
 
-Both Dockerfiles must be built from the root of the cloned `CalculatorMavenApp` project, so copy them there first:
+This folder is self-contained: it includes the Maven project files (`pom.xml`, `src/` and the built `target/calculator.jar`) copied from https://github.com/Ibrahim-Adel15/CalculatorMavenApp, so both Dockerfiles are built directly from this folder:
 
 ```bash
-git clone https://github.com/Ibrahim-Adel15/CalculatorMavenApp.git
-cd CalculatorMavenApp
-cp /path/to/this/repo/lab3-docker/Dockerfile .
-cp /path/to/this/repo/lab3-docker/Dockerfile.local .
+cd labs-new/lab3-docker
 ```
 
 > The app is a console application that reads numbers from standard input. It does not listen on a port, so `EXPOSE 8080` is only metadata required by the lab. Containers are run with `-it` so the app can read input.

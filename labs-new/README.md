@@ -15,4 +15,4 @@ Each folder has its own README with the steps, commands and results.
 - Maven app: https://github.com/Ibrahim-Adel15/CalculatorMavenApp
 - Gradle app: https://github.com/Ibrahim-Adel15/CalculatorGradleApp
 
-The application source is not copied into this repository; each lab explains how to clone it.
+Each lab folder also contains the application files (`pom.xml` or `build.gradle`, `src`, and the build output) copied from these repositories.
