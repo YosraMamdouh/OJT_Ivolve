@@ -1,6 +1,8 @@
 # DevOps Labs
 
-Hands-on labs for building, packaging, containerizing and deploying applications. Each lab has its own folder with the files that were used and a README with the steps, the commands and the results.
+Hands-on labs from the iVolve DevOps training. The labs follow the path of an application: build it, package it in a container, secure and optimize the image, run it as a multi-container stack, and then run workloads on a Kubernetes cluster.
+
+Each lab has its own folder with the files that were used and a README with the steps, the commands, the results and screenshots.
 
 ## Repository structure
 
@@ -22,6 +24,38 @@ DevOps-Labs
     ├── Lab11  (Namespace and ResourceQuota)
     └── Lab12  (ConfigMap and Secret)
 ```
+
+## Tools and technologies
+
+| Area | Tools | Labs |
+|------|-------|:----:|
+| Build tools | Maven, Gradle (Java 17) | 1, 2 |
+| Containers | Docker, multi-stage builds, non-root users, image export and load | 3, 4 |
+| Security | Trivy image scanning and remediation | 5 |
+| Configuration | Environment variables, `--env-file`, CPU and memory limits | 6 |
+| Networking and storage | User-defined bridge networks, named volumes, bind mounts | 7 |
+| Multi-container apps | Docker Compose, health checks, Docker Hub | 8 |
+| Kubernetes cluster | kubeadm, kubelet, kubectl, containerd, Calico | 9 |
+| Kubernetes scheduling and resources | Taints, labels, namespaces, ResourceQuota | 10, 11 |
+| Kubernetes configuration | ConfigMap, Secret (Base64) | 12 |
+
+## How to read this repository
+
+1. Open the folder of a lab and read its `README.md`. It lists the files, the commands in the order they were run, the real output, and what each step does.
+2. The `screenshots/` folder of each lab shows the commands and their results.
+3. The files next to the README (Dockerfiles, `docker-compose.yml`, YAML manifests) are the ones used in the lab, so they can be reused.
+
+## Prerequisites
+
+The labs were done on Windows with **WSL2 (Ubuntu)**.
+
+| Needed for | Requirement |
+|------------|-------------|
+| All labs | Git and a terminal (WSL2 with Ubuntu) |
+| Labs 1 to 3 | Java 17, Maven and Gradle |
+| Labs 3 to 8 | Docker and Docker Compose |
+| Lab 5 | Trivy |
+| Labs 9 to 12 | kubeadm, kubelet, kubectl and containerd (installed in Lab 9) |
 
 ## Labs
 
