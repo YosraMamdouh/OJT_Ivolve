@@ -80,4 +80,7 @@ kubectl taint nodes desktop-1nodl4r workload=ivolveApp:NoSchedule-
 
 ## Screenshots
 
-See the [`screenshots/`](./screenshots) folder.
+
+![Lab 10 - 01-lab10](screenshots/01-lab10.png)
+
+![Lab 10 - 02-lab10](screenshots/02-lab10.png)

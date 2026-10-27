@@ -91,4 +91,11 @@ kubectl delete pod test-pod1 test-pod2 test-pod3 -n ivolve
 
 ## Screenshots
 
-See the [`screenshots/`](./screenshots) folder.
+
+![Lab 11 - 01-lab11](screenshots/01-lab11.png)
+
+![Lab 11 - 02-lab11](screenshots/02-lab11.png)
+
+![Lab 11 - 03-lab11](screenshots/03-lab11.png)
+
+![Lab 11 - 04-lab11](screenshots/04-lab11.png)

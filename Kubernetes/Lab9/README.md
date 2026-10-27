@@ -140,4 +140,11 @@ kube-system   kube-scheduler-desktop-1nodl4r            1/1     Running   3
 The node is `Ready` and all the control-plane components (API server, etcd, controller manager, scheduler), kube-proxy, CoreDNS and Calico are `Running`.
 ## Screenshots
 
-See the [`screenshots/`](./screenshots) folder.
+
+![Lab 9 - 01-lab9](screenshots/01-lab9.png)
+
+![Lab 9 - 02-lab9](screenshots/02-lab9.png)
+
+![Lab 9 - 03-lab9](screenshots/03-lab9.png)
+
+![Lab 9 - lab9-verification](screenshots/lab9-verification.png)

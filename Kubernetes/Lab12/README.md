@@ -108,4 +108,7 @@ UserPassword@123
 
 ## Screenshots
 
-See the [`screenshots/`](./screenshots) folder.
+
+![Lab 12 - 01-lab12](screenshots/01-lab12.png)
+
+![Lab 12 - 02-lab12](screenshots/02-lab12.png)
