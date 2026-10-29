@@ -112,3 +112,7 @@ UserPassword@123
 ![Lab 12 - 01-lab12](screenshots/01-lab12.png)
 
 ![Lab 12 - 02-lab12](screenshots/02-lab12.png)
+
+![Lab 12 - 01-lab12](screenshots/01-lab12.png)
+
+![Lab 12 - 02-lab12](screenshots/02-lab12.png)
