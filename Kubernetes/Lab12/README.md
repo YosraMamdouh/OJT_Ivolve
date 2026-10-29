@@ -11,6 +11,8 @@ Application configuration is stored in a `ConfigMap` (non-sensitive values) and 
 
 The namespace `ivolve` was created in [Lab 11](../Lab11).
 
+> **Names:** the task names the objects `ivolveCM` and `ivolveSecret`. Kubernetes object names must be lowercase (`[a-z0-9-.]`), and the same rule rejected `ivolveQuota` in Lab 11, so they are created as `ivolve-cm` and `ivolve-secret`.
+
 ## Step 1: Create the ConfigMap
 
 ```yaml
@@ -33,6 +35,8 @@ configmap/ivolve-cm created
 ```
 
 `DB_HOST` is the DNS name of a headless Service called `mysql-headless` in the `ivolve` namespace.
+
+> **Update in Lab 14:** the headless Service was created with the name `ivolve-db-svc`, so `DB_HOST` was changed to `ivolve-db-svc.ivolve.svc.cluster.local` and the ConfigMap was applied again. The manifest `ivolve-cm.yaml` in this folder has the final value; the output below was captured before the change.
 
 ## Step 2: Encode the passwords and create the Secret
 
@@ -108,10 +112,6 @@ UserPassword@123
 
 ## Screenshots
 
-
-![Lab 12 - 01-lab12](screenshots/01-lab12.png)
-
-![Lab 12 - 02-lab12](screenshots/02-lab12.png)
 
 ![Lab 12 - 01-lab12](screenshots/01-lab12.png)
 

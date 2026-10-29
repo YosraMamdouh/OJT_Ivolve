@@ -159,3 +159,13 @@ The PV and the PVC are kept.
 ![Lab 13 - 04-lab13](screenshots/04-lab13.png)
 
 ![Lab 13 - 05-lab13](screenshots/05-lab13.png)
+
+![Lab 13 - 01-lab13](screenshots/01-lab13.png)
+
+![Lab 13 - 02-lab13](screenshots/02-lab13.png)
+
+![Lab 13 - 03-lab13](screenshots/03-lab13.png)
+
+![Lab 13 - 04-lab13](screenshots/04-lab13.png)
+
+![Lab 13 - 05-lab13](screenshots/05-lab13.png)
