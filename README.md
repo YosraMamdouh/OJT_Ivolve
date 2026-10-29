@@ -22,7 +22,9 @@ DevOps-Labs
     ├── Lab9   (Kubernetes cluster with kubeadm)
     ├── Lab10  (Node isolation with taints and labels)
     ├── Lab11  (Namespace and ResourceQuota)
-    └── Lab12  (ConfigMap and Secret)
+    ├── Lab12  (ConfigMap and Secret)
+    ├── Lab13  (Persistent storage with PV and PVC)
+    └── Lab14  (StatefulSet with a headless Service)
 ```
 
 ## Tools and technologies
@@ -38,6 +40,8 @@ DevOps-Labs
 | Kubernetes cluster | kubeadm, kubelet, kubectl, containerd, Calico | 9 |
 | Kubernetes scheduling and resources | Taints, labels, namespaces, ResourceQuota | 10, 11 |
 | Kubernetes configuration | ConfigMap, Secret (Base64) | 12 |
+| Kubernetes storage | PersistentVolume, PersistentVolumeClaim, `hostPath` | 13 |
+| Kubernetes stateful workloads | StatefulSet, headless Service, PVC template, cluster DNS, MySQL | 14 |
 
 ## How to read this repository
 
@@ -55,7 +59,7 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | Labs 1 to 3 | Java 17, Maven and Gradle |
 | Labs 3 to 8 | Docker and Docker Compose |
 | Lab 5 | Trivy |
-| Labs 9 to 12 | kubeadm, kubelet, kubectl and containerd (installed in Lab 9) |
+| Labs 9 to 14 | kubeadm, kubelet, kubectl and containerd (installed in Lab 9) |
 
 ## Labs
 
@@ -73,6 +77,8 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | 10 | Node isolation using **taints** and **labels** | [Kubernetes/Lab10](./Kubernetes/Lab10) |
 | 11 | Namespace and **ResourceQuota** enforcement | [Kubernetes/Lab11](./Kubernetes/Lab11) |
 | 12 | Configuration and sensitive data with **ConfigMap** and **Secret** | [Kubernetes/Lab12](./Kubernetes/Lab12) |
+| 13 | Persistent storage with a **PersistentVolume** and a **PersistentVolumeClaim** | [Kubernetes/Lab13](./Kubernetes/Lab13) |
+| 14 | MySQL as a **StatefulSet** with a **headless Service** | [Kubernetes/Lab14](./Kubernetes/Lab14) |
 
 ## Highlights
 
@@ -86,6 +92,8 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 - **Lab 10:** a node was tainted with `workload=ivolveApp:NoSchedule` and labeled `project=ivolve`, then checked with `kubectl describe node` and `kubectl get nodes --show-labels`.
 - **Lab 11:** a ResourceQuota limits the `ivolve` namespace to 3 Pods, and the fourth Pod is rejected by Kubernetes.
 - **Lab 12:** database settings are stored in a ConfigMap, and the passwords in a Secret with Base64-encoded values.
+- **Lab 13:** a 1Gi `hostPath` PersistentVolume (`ReadWriteMany`, `Retain`) bound to a PersistentVolumeClaim without any StorageClass. A test Pod wrote a log file that was read both inside the Pod and on the node.
+- **Lab 14:** MySQL runs as a StatefulSet that reads its settings from the ConfigMap and the Secret, runs only on the node labeled `project=ivolve`, and stores its data on a PersistentVolume. A client connection works, and the headless Service name and the Pod name both resolve to the Pod IP.
 
 ## Source code used
 
@@ -99,6 +107,8 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | 7 | https://github.com/Ibrahim-Adel15/MicroserviceApp |
 | 8 | https://github.com/Ibrahim-Adel15/iVolveApp |
 
-Each lab folder contains the files used in that lab, copied from these repositories. Labs 9 to 12 are done with commands and manifests written for the lab, so they have no source repository.
+Each lab folder contains the files used in that lab, copied from these repositories. Labs 9 to 14 are done with commands and manifests written for the lab, so they have no source repository.
+
+> In the Kubernetes labs the task names such as `ivolveQuota` or `ivolveDB` contain capital letters, which Kubernetes does not accept, so the objects use lowercase names with hyphens (`ivolve-quota`, `ivolve-db`, and so on).
 
 > Lab 8 reads its passwords from a `.env` file, which is not committed. Copy `.env.example` to `.env` and set your own values.
