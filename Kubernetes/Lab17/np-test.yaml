@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: np-test
+  namespace: ivolve
+spec:
+  tolerations:
+    - key: workload
+      operator: Equal
+      value: ivolveApp
+      effect: NoSchedule
+  containers:
+    - name: mysql-client
+      image: mysql:8.0
+      command: ["sleep", "3600"]
+      envFrom:
+        - configMapRef:
+            name: ivolve-cm
+        - secretRef:
+            name: ivolve-secret
