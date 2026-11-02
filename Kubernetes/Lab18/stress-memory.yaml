@@ -1,0 +1,16 @@
+# Test pod: allocates memory so usage goes above 80%.
+# Set --vm-bytes to about 75% of the memory that is FREE (check with: free -m)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: stress-memory
+  namespace: monitoring
+spec:
+  restartPolicy: Never
+  tolerations:
+    - operator: Exists
+  containers:
+    - name: stress
+      image: polinux/stress
+      command: ["stress"]
+      args: ["--vm", "1", "--vm-bytes", "3G", "--vm-hang", "0"]

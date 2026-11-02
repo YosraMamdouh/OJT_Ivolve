@@ -1,0 +1,19 @@
+# Template only - the real file (with the real e-mail and App Password) is
+# generated locally, loaded into a Secret, and deleted. Never commit it.
+global:
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'MAIL_ADDRESS'
+  smtp_auth_username: 'MAIL_ADDRESS'
+  smtp_auth_password: 'APP_PASSWORD'
+  smtp_require_tls: true
+route:
+  receiver: email
+  group_by: ['alertname', 'instance']
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 1h
+receivers:
+  - name: email
+    email_configs:
+      - to: 'MAIL_ADDRESS'
+        send_resolved: true
