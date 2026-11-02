@@ -265,3 +265,7 @@ kubectl delete pod stress-cpu -n monitoring
 ![Lab 18 - Screenshot 2026-11-03 003547](screenshots/Screenshot 2026-11-03 003547.png)
 
 ![Lab 18 - Screenshot 2026-11-03 003849](screenshots/Screenshot 2026-11-03 003849.png)
+
+![Lab 18 - Alert-mail-resolved](screenshots/Alert-mail-resolved.png)
+
+![Lab 18 - Alert-mail](screenshots/Alert-mail.png)
