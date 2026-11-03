@@ -18,13 +18,21 @@ DevOps-Labs
 │   ├── Lab6   (Environment variables and resource management)
 │   ├── Lab7   (Multi-network microservices, volumes and bind mounts)
 │   └── Lab8   (Node.js and MySQL stack with Docker Compose)
-└── Kubernetes
-    ├── Lab9   (Kubernetes cluster with kubeadm)
-    ├── Lab10  (Node isolation with taints and labels)
-    ├── Lab11  (Namespace and ResourceQuota)
-    ├── Lab12  (ConfigMap and Secret)
-    ├── Lab13  (Persistent storage with PV and PVC)
-    └── Lab14  (StatefulSet with a headless Service)
+├── Kubernetes
+│   ├── Lab9   (Kubernetes cluster with kubeadm)
+│   ├── Lab10  (Node isolation with taints and labels)
+│   ├── Lab11  (Namespace and ResourceQuota)
+│   ├── Lab12  (ConfigMap and Secret)
+│   ├── Lab13  (Persistent storage with PV and PVC)
+│   ├── Lab14  (StatefulSet with a headless Service)
+│   ├── Lab15  (Node.js application with a ClusterIP Service)
+│   ├── Lab16  (Resource requests and limits)
+│   ├── Lab17  (Network Policy)
+│   ├── Lab18  (Monitoring with Prometheus, Alertmanager, Grafana and a DaemonSet)
+│   └── Lab19  (RBAC and Service Accounts)
+└── Jenkins
+    ├── Lab20-README.md  (Role-based authorization in Jenkins)
+    └── screenshots
 ```
 
 ## Tools and technologies
@@ -42,6 +50,12 @@ DevOps-Labs
 | Kubernetes configuration | ConfigMap, Secret (Base64) | 12 |
 | Kubernetes storage | PersistentVolume, PersistentVolumeClaim, `hostPath` | 13 |
 | Kubernetes stateful workloads | StatefulSet, headless Service, PVC template, cluster DNS, MySQL | 14 |
+| Kubernetes application deployment | Deployment, init container, ClusterIP Service, node selector, tolerations | 15 |
+| Kubernetes resource management | Requests and limits, metrics server, `kubectl top` | 16 |
+| Kubernetes networking | NetworkPolicy (Calico) | 17 |
+| Kubernetes monitoring | DaemonSet, Prometheus, Alertmanager (e-mail alerts), Grafana, node-exporter | 18 |
+| Kubernetes security | ServiceAccount, token, Role, RoleBinding, RBAC | 19 |
+| CI/CD security | Jenkins, Role-based Authorization Strategy plugin | 20 |
 
 ## How to read this repository
 
@@ -59,7 +73,8 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | Labs 1 to 3 | Java 17, Maven and Gradle |
 | Labs 3 to 8 | Docker and Docker Compose |
 | Lab 5 | Trivy |
-| Labs 9 to 14 | kubeadm, kubelet, kubectl and containerd (installed in Lab 9) |
+| Labs 9 to 19 | kubeadm, kubelet, kubectl and containerd (installed in Lab 9) |
+| Lab 20 | Jenkins (run in a Docker container) |
 
 ## Labs
 
@@ -79,6 +94,12 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | 12 | Configuration and sensitive data with **ConfigMap** and **Secret** | [Kubernetes/Lab12](./Kubernetes/Lab12) |
 | 13 | Persistent storage with a **PersistentVolume** and a **PersistentVolumeClaim** | [Kubernetes/Lab13](./Kubernetes/Lab13) |
 | 14 | MySQL as a **StatefulSet** with a **headless Service** | [Kubernetes/Lab14](./Kubernetes/Lab14) |
+| 15 | Node.js application **Deployment** with an init container and a **ClusterIP Service** | [Kubernetes/Lab15](./Kubernetes/Lab15) |
+| 16 | Pod resource management with CPU and memory **requests and limits** | [Kubernetes/Lab16](./Kubernetes/Lab16) |
+| 17 | Control Pod-to-Pod traffic with a **Network Policy** | [Kubernetes/Lab17](./Kubernetes/Lab17) |
+| 18 | Node-wide monitoring with a **DaemonSet**, Prometheus, Alertmanager and Grafana | [Kubernetes/Lab18](./Kubernetes/Lab18) |
+| 19 | Secure Kubernetes with **RBAC** and a **Service Account** | [Kubernetes/Lab19](./Kubernetes/Lab19) |
+| 20 | **Role-based authorization** in Jenkins (admin and read-only users) | [Jenkins/Lab20-README.md](./Jenkins/Lab20-README.md) |
 
 ## Highlights
 
@@ -94,6 +115,12 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 - **Lab 12:** database settings are stored in a ConfigMap, and the passwords in a Secret with Base64-encoded values.
 - **Lab 13:** a 1Gi `hostPath` PersistentVolume (`ReadWriteMany`, `Retain`) bound to a PersistentVolumeClaim without any StorageClass. A test Pod wrote a log file that was read both inside the Pod and on the node.
 - **Lab 14:** MySQL runs as a StatefulSet that reads its settings from the ConfigMap and the Secret, runs only on the node labeled `project=ivolve`, and stores its data on a PersistentVolume. A client connection works, and the headless Service name and the Pod name both resolve to the Pod IP.
+- **Lab 15:** the image from Lab 8 runs as a Deployment of 2 replicas. An init container with a MySQL client creates the `ivolve` database and grants the privileges, the Pods store their logs on the volume of Lab 13, and a ClusterIP Service distributes the traffic. Both Pods connect to MySQL and find the `ivolve` database.
+- **Lab 16:** the Deployment was updated with requests (1 CPU, 1Gi) and limits (2 CPUs, 2Gi), which were verified with `kubectl describe pod`. The metrics server was installed, and `kubectl top` shows that the application Pods use about 20Mi of memory, far below their requests.
+- **Lab 17:** a Network Policy allows only the application Pods to reach MySQL on port 3306. A test Pod could not connect without the application label (the connection timed out), and could connect after the label was added.
+- **Lab 18:** a DaemonSet runs `node-exporter` on every node and exposes metrics on port 9100. Prometheus scrapes them, Alertmanager sends an e-mail when CPU or memory usage is above 80% for 1 minute, and Grafana shows a provisioned CPU and memory dashboard. The SMTP password is kept in a Kubernetes Secret and is not stored in the repository.
+- **Lab 19:** the Service Account `jenkins-sa` can create and update Deployments in the `ivolve` namespace only. It was tested with its own token: creating and replacing a Deployment worked, while reading or deleting Deployments, creating Deployments in `default` and `kube-system`, and listing Pods were forbidden.
+- **Lab 20:** Jenkins got an `admin` role and a `readonly` role with the Role-based Authorization Strategy plugin. `user1` is an administrator, and `user2` can see the jobs but does not get New Item, Manage Jenkins or Build Now.
 
 ## Source code used
 
@@ -107,7 +134,7 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | 7 | https://github.com/Ibrahim-Adel15/MicroserviceApp |
 | 8 | https://github.com/Ibrahim-Adel15/iVolveApp |
 
-Each lab folder contains the files used in that lab, copied from these repositories. Labs 9 to 14 are done with commands and manifests written for the lab, so they have no source repository.
+Each lab folder contains the files used in that lab, copied from these repositories. Labs 9 to 20 are done with commands, manifests and settings written for the lab, so they have no source repository.
 
 > In the Kubernetes labs the task names such as `ivolveQuota` or `ivolveDB` contain capital letters, which Kubernetes does not accept, so the objects use lowercase names with hyphens (`ivolve-quota`, `ivolve-db`, and so on).
 
