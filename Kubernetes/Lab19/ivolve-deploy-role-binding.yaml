@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ivolve-deploy-role-binding
+  namespace: ivolve
+subjects:
+  - kind: ServiceAccount
+    name: jenkins-sa
+    namespace: ivolve
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: ivolve-deploy-role
