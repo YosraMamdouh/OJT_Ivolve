@@ -30,9 +30,9 @@ DevOps-Labs
 │   ├── Lab17  (Network Policy)
 │   ├── Lab18  (Monitoring with Prometheus, Alertmanager, Grafana and a DaemonSet)
 │   └── Lab19  (RBAC and Service Accounts)
-└── Jenkins
-    ├── Lab20-README.md  (Role-based authorization in Jenkins)
-    └── screenshots
+└── jenkins
+    ├── Lab20  (Role-based authorization in Jenkins)
+    └── Lab21  (Jenkins pipeline: build, scan, push and deploy)
 ```
 
 ## Tools and technologies
@@ -74,7 +74,7 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | Labs 3 to 8 | Docker and Docker Compose |
 | Lab 5 | Trivy |
 | Labs 9 to 19 | kubeadm, kubelet, kubectl and containerd (installed in Lab 9) |
-| Lab 20 | Jenkins (run in a Docker container) |
+| Lab 20, 21 | Jenkins (run in a Docker container), Jenkinsfile pipeline, Trivy, Docker Hub |
 
 ## Labs
 
@@ -99,7 +99,8 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | 17 | Control Pod-to-Pod traffic with a **Network Policy** | [Kubernetes/Lab17](./Kubernetes/Lab17) |
 | 18 | Node-wide monitoring with a **DaemonSet**, Prometheus, Alertmanager and Grafana | [Kubernetes/Lab18](./Kubernetes/Lab18) |
 | 19 | Secure Kubernetes with **RBAC** and a **Service Account** | [Kubernetes/Lab19](./Kubernetes/Lab19) |
-| 20 | **Role-based authorization** in Jenkins (admin and read-only users) | [Jenkins/Lab20-README.md](./Jenkins/Lab20-README.md) |
+| 20 | **Role-based authorization** in Jenkins (admin and read-only users) | [jenkins/Lab20](./jenkins/Lab20) |
+| 21 | **Jenkins pipeline** that builds, scans, pushes and deploys the application to Kubernetes | [jenkins/Lab21](./jenkins/Lab21) |
 
 ## Highlights
 
@@ -121,6 +122,7 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 - **Lab 18:** a DaemonSet runs `node-exporter` on every node and exposes metrics on port 9100. Prometheus scrapes them, Alertmanager sends an e-mail when CPU or memory usage is above 80% for 1 minute, and Grafana shows a provisioned CPU and memory dashboard. The SMTP password is kept in a Kubernetes Secret and is not stored in the repository.
 - **Lab 19:** the Service Account `jenkins-sa` can create and update Deployments in the `ivolve` namespace only. It was tested with its own token: creating and replacing a Deployment worked, while reading or deleting Deployments, creating Deployments in `default` and `kube-system`, and listing Pods were forbidden.
 - **Lab 20:** Jenkins got an `admin` role and a `readonly` role with the Role-based Authorization Strategy plugin. `user1` is an administrator, and `user2` can see the jobs but does not get New Item, Manage Jenkins or Build Now.
+- **Lab 21:** a Jenkins pipeline (`Jenkinsfile`) with 7 stages: build the app, build the Docker image, scan it with Trivy, push it to Docker Hub, delete it locally, write the new tag into the deployment file, and deploy to Kubernetes with the `jenkins-sa` token of Lab 19. The image tag is the build number, and the Deployment rolled out to `yosramamdouh234/ivolve-app:3`. The post actions `always`, `success` and `failure` clean up the image and the Docker login and print the result.
 
 ## Source code used
 
@@ -133,6 +135,7 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | 6 | https://github.com/Ibrahim-Adel15/PythonApp |
 | 7 | https://github.com/Ibrahim-Adel15/MicroserviceApp |
 | 8 | https://github.com/Ibrahim-Adel15/iVolveApp |
+| 21 | https://github.com/YosraMamdouh/Ivolve-app-cicd (the application of Lab 8 with its Dockerfile, Kubernetes files and Jenkinsfile) |
 
 Each lab folder contains the files used in that lab, copied from these repositories. Labs 9 to 20 are done with commands, manifests and settings written for the lab, so they have no source repository.
 
