@@ -113,9 +113,9 @@ Finished: SUCCESS
 
 The "No such image" messages in the `always` block are expected: stage 5 already deleted the images, and the command ends with `|| true`.
 
-![Stage View of build 3](./screenshots/01-stage-view.png)
+![Stage View of build 3](./screenshots/1-stage-view.png)
 
-![End of the console output](./screenshots/02-console-end.png)
+![End of the console output](./screenshots/2-console-end.png)
 
 ### Check on the cluster
 
@@ -143,13 +143,13 @@ ivolve-app-648f4b4bd5-hm2p9   1/1     Running   0               92s   192.168.13
 ivolve-db-0                   1/1     Running   5 (5d21h ago)   11d   192.168.131.8    desktop-1nodl4r   <none>           <none>
 ```
 
-![Cluster check](./screenshots/03-cluster.png)
+![Cluster check](./screenshots/3-cluster.png)
 
 ### Docker Hub
 
 The tags of the build were pushed to `yosramamdouh234/ivolve-app`.
 
-![Docker Hub](./screenshots/04-dockerhub.png)
+![Docker Hub](./screenshots/4-dockerhub.png)
 
 ## Notes
 
