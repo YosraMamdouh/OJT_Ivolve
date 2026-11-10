@@ -1,6 +1,6 @@
 # DevOps Labs
 
-Hands-on labs from the iVolve DevOps training. The labs follow the path of an application: build it, package it in a container, secure and optimize the image, run it as a multi-container stack, and then run workloads on a Kubernetes cluster.
+Hands-on labs from the iVolve DevOps training. The labs follow the path of an application: build it, package it in a container, secure and optimize the image, run it as a multi-container stack, run workloads on a Kubernetes cluster, automate the build and the deployment with Jenkins and Argo CD (CI/CD and GitOps), and configure machines with Ansible.
 
 Each lab has its own folder with the files that were used and a README with the steps, the commands, the results and screenshots.
 
@@ -158,8 +158,12 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | 21, 22, 23 | https://github.com/YosraMamdouh/Ivolve-app-cicd (the application of Lab 8 with its Dockerfile, Kubernetes files and Jenkinsfile) |
 | 22, 23 | https://github.com/YosraMamdouh/ivolve-shared-library (the shared libraries) |
 
-Each lab folder contains the files used in that lab, copied from these repositories. Labs 9 to 26 are done with commands, manifests and settings written for the lab, so they have no source repository.
+Each lab folder contains the files used in that lab, copied from these repositories. Labs 9 to 20 and 24 to 26 are done with commands, manifests and settings written for the lab, so they have no source repository. Labs 21 to 23 use the application of Lab 8, so the repositories above hold their application and pipeline code.
 
 > In the Kubernetes labs the task names such as `ivolveQuota` or `ivolveDB` contain capital letters, which Kubernetes does not accept, so the objects use lowercase names with hyphens (`ivolve-quota`, `ivolve-db`, and so on).
+
+> Labs 21 to 23 use the application of Lab 8 (and not the `DemoApp` repository named in the task), as the instructor suggested, so the same application goes through Docker, Kubernetes, Jenkins and Argo CD.
+
+> Labs 24 to 26 use two Ubuntu distributions on the same Windows machine (WSL2): one is the Ansible control node and the other is the managed node. They share the same network, so the Jenkins installed by Ansible runs on port 8090 and not 8080.
 
 > Lab 8 reads its passwords from a `.env` file, which is not committed. Copy `.env.example` to `.env` and set your own values.
