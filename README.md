@@ -30,11 +30,15 @@ DevOps-Labs
 │   ├── Lab17  (Network Policy)
 │   ├── Lab18  (Monitoring with Prometheus, Alertmanager, Grafana and a DaemonSet)
 │   └── Lab19  (RBAC and Service Accounts)
-└── jenkins
+├── jenkins
     ├── Lab20  (Role-based authorization in Jenkins)
     ├── Lab21  (Jenkins pipeline: build, scan, push and deploy)
     ├── Lab22  (Shared libraries and a Jenkins agent)
     └── Lab23  (GitOps with Jenkins and Argo CD)
+└── Ansible
+    ├── Lab24  (Ansible installation, SSH key, inventory and ad-hoc commands)
+    ├── Lab25  (Playbook that installs Docker, kubectl and Jenkins)
+    └── Lab26  (Ansible roles)
 ```
 
 ## Tools and technologies
@@ -58,6 +62,9 @@ DevOps-Labs
 | Kubernetes monitoring | DaemonSet, Prometheus, Alertmanager (e-mail alerts), Grafana, node-exporter | 18 |
 | Kubernetes security | ServiceAccount, token, Role, RoleBinding, RBAC | 19 |
 | CI/CD security | Jenkins, Role-based Authorization Strategy plugin | 20 |
+| CI/CD pipelines | Jenkinsfile, Docker Hub, Trivy, shared libraries, Jenkins agent | 21, 22 |
+| GitOps | Argo CD, automatic synchronization | 23 |
+| Configuration management | Ansible: inventory, ad-hoc commands, playbooks, roles | 24, 25, 26 |
 
 ## How to read this repository
 
@@ -77,6 +84,7 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | Lab 5 | Trivy |
 | Labs 9 to 19 | kubeadm, kubelet, kubectl and containerd (installed in Lab 9) |
 | Lab 20, 21, 22, 23 | Jenkins (run in a Docker container), Jenkinsfile pipeline, shared libraries, Jenkins agent, Trivy, Docker Hub, Argo CD (GitOps) |
+| Labs 24 to 26 | Ansible on a control node, and a second Ubuntu machine (a WSL distribution here) as the managed node, reached by SSH |
 
 ## Labs
 
@@ -105,6 +113,9 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | 21 | **Jenkins pipeline** that builds, scans, pushes and deploys the application to Kubernetes | [jenkins/Lab21](./jenkins/Lab21) |
 | 22 | Pipeline with **Shared Libraries** (BuildApp, BuildImage, DeployOnK8s) running on a **Jenkins agent** | [jenkins/Lab22](./jenkins/Lab22) |
 | 23 | **GitOps** with Jenkins and **Argo CD**: Jenkins pushes the edited deployment file to GitHub and Argo CD deploys it | [jenkins/Lab23](./jenkins/Lab23) |
+| 24 | **Ansible** installation, SSH key, inventory and an ad-hoc command that installs Docker | [Ansible/Lab24](./Ansible/Lab24) |
+| 25 | An Ansible **playbook** that installs Docker, kubectl and Jenkins | [Ansible/Lab25](./Ansible/Lab25) |
+| 26 | The same configuration organized as Ansible **roles** | [Ansible/Lab26](./Ansible/Lab26) |
 
 ## Highlights
 
@@ -129,6 +140,9 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 - **Lab 21:** a Jenkins pipeline (`Jenkinsfile`) with 7 stages: build the app, build the Docker image, scan it with Trivy, push it to Docker Hub, delete it locally, write the new tag into the deployment file, and deploy to Kubernetes with the `jenkins-sa` token of Lab 19. The image tag is the build number, and the Deployment rolled out to `yosramamdouh234/ivolve-app:3`. The post actions `always`, `success` and `failure` clean up the image and the Docker login and print the result.
 - **Lab 22:** the stages of the pipeline moved into three shared libraries (`buildApp`, `buildImage`, `deployOnK8s`) kept in their own repository, and the `Jenkinsfile` only calls them. The pipeline runs on a Jenkins agent (`docker-agent`, a Docker container connected to Jenkins over WebSocket). Build #5 ran on the agent, pushed `ivolve-app:5` and deployed it, and both application Pods were `Running`.
 - **Lab 23:** Argo CD was installed in the `argocd` namespace (with a toleration for the tainted node) and an Application named `ivolve` watches the `k8s/` folder of the application repository with automatic sync. The `deployOnK8s` library now edits the deployment file and pushes it to GitHub instead of calling `kubectl`. After build #6, GitHub had the commit `Update image to 6`, and the Deployment in the cluster ran `ivolve-app:6` without Jenkins touching the cluster.
+- **Lab 24:** Ansible was installed on the control node, a new SSH key was copied to the managed node with `ssh-copy-id`, and an inventory and the `ping` module confirmed the connection. An ad-hoc `apt` command installed Docker (`29.1.3`) on the managed node.
+- **Lab 25:** a playbook installs Docker, kubectl (`v1.30.0`, checked with its SHA-256) and Jenkins (on port 8090) on the managed node. Two problems of the Jenkins package were found and fixed: its repository key had changed and it needs Java 21.
+- **Lab 26:** the same configuration was split into three roles (`docker`, `kubectl`, `jenkins`) run by one playbook. After removing the tools from the managed node, the roles installed them again (`changed=3`, `failed=0`) and the Jenkins login page answered with HTTP 200.
 
 ## Source code used
 
@@ -144,7 +158,7 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | 21, 22, 23 | https://github.com/YosraMamdouh/Ivolve-app-cicd (the application of Lab 8 with its Dockerfile, Kubernetes files and Jenkinsfile) |
 | 22, 23 | https://github.com/YosraMamdouh/ivolve-shared-library (the shared libraries) |
 
-Each lab folder contains the files used in that lab, copied from these repositories. Labs 9 to 20 are done with commands, manifests and settings written for the lab, so they have no source repository.
+Each lab folder contains the files used in that lab, copied from these repositories. Labs 9 to 26 are done with commands, manifests and settings written for the lab, so they have no source repository.
 
 > In the Kubernetes labs the task names such as `ivolveQuota` or `ivolveDB` contain capital letters, which Kubernetes does not accept, so the objects use lowercase names with hyphens (`ivolve-quota`, `ivolve-db`, and so on).
 

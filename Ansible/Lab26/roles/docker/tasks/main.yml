@@ -1,0 +1,12 @@
+---
+- name: Install Docker
+  ansible.builtin.apt:
+    name: "{{ docker_package }}"
+    state: present
+    update_cache: true
+
+- name: Start and enable the Docker service
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
