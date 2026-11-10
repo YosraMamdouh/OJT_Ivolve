@@ -33,7 +33,8 @@ DevOps-Labs
 └── jenkins
     ├── Lab20  (Role-based authorization in Jenkins)
     ├── Lab21  (Jenkins pipeline: build, scan, push and deploy)
-    └── Lab22  (Shared libraries and a Jenkins agent)
+    ├── Lab22  (Shared libraries and a Jenkins agent)
+    └── Lab23  (GitOps with Jenkins and Argo CD)
 ```
 
 ## Tools and technologies
@@ -75,7 +76,7 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | Labs 3 to 8 | Docker and Docker Compose |
 | Lab 5 | Trivy |
 | Labs 9 to 19 | kubeadm, kubelet, kubectl and containerd (installed in Lab 9) |
-| Lab 20, 21, 22 | Jenkins (run in a Docker container), Jenkinsfile pipeline, shared libraries, Jenkins agent, Trivy, Docker Hub |
+| Lab 20, 21, 22, 23 | Jenkins (run in a Docker container), Jenkinsfile pipeline, shared libraries, Jenkins agent, Trivy, Docker Hub, Argo CD (GitOps) |
 
 ## Labs
 
@@ -103,6 +104,7 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | 20 | **Role-based authorization** in Jenkins (admin and read-only users) | [jenkins/Lab20](./jenkins/Lab20) |
 | 21 | **Jenkins pipeline** that builds, scans, pushes and deploys the application to Kubernetes | [jenkins/Lab21](./jenkins/Lab21) |
 | 22 | Pipeline with **Shared Libraries** (BuildApp, BuildImage, DeployOnK8s) running on a **Jenkins agent** | [jenkins/Lab22](./jenkins/Lab22) |
+| 23 | **GitOps** with Jenkins and **Argo CD**: Jenkins pushes the edited deployment file to GitHub and Argo CD deploys it | [jenkins/Lab23](./jenkins/Lab23) |
 
 ## Highlights
 
@@ -126,6 +128,7 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 - **Lab 20:** Jenkins got an `admin` role and a `readonly` role with the Role-based Authorization Strategy plugin. `user1` is an administrator, and `user2` can see the jobs but does not get New Item, Manage Jenkins or Build Now.
 - **Lab 21:** a Jenkins pipeline (`Jenkinsfile`) with 7 stages: build the app, build the Docker image, scan it with Trivy, push it to Docker Hub, delete it locally, write the new tag into the deployment file, and deploy to Kubernetes with the `jenkins-sa` token of Lab 19. The image tag is the build number, and the Deployment rolled out to `yosramamdouh234/ivolve-app:3`. The post actions `always`, `success` and `failure` clean up the image and the Docker login and print the result.
 - **Lab 22:** the stages of the pipeline moved into three shared libraries (`buildApp`, `buildImage`, `deployOnK8s`) kept in their own repository, and the `Jenkinsfile` only calls them. The pipeline runs on a Jenkins agent (`docker-agent`, a Docker container connected to Jenkins over WebSocket). Build #5 ran on the agent, pushed `ivolve-app:5` and deployed it, and both application Pods were `Running`.
+- **Lab 23:** Argo CD was installed in the `argocd` namespace (with a toleration for the tainted node) and an Application named `ivolve` watches the `k8s/` folder of the application repository with automatic sync. The `deployOnK8s` library now edits the deployment file and pushes it to GitHub instead of calling `kubectl`. After build #6, GitHub had the commit `Update image to 6`, and the Deployment in the cluster ran `ivolve-app:6` without Jenkins touching the cluster.
 
 ## Source code used
 
@@ -138,8 +141,8 @@ The labs were done on Windows with **WSL2 (Ubuntu)**.
 | 6 | https://github.com/Ibrahim-Adel15/PythonApp |
 | 7 | https://github.com/Ibrahim-Adel15/MicroserviceApp |
 | 8 | https://github.com/Ibrahim-Adel15/iVolveApp |
-| 21, 22 | https://github.com/YosraMamdouh/Ivolve-app-cicd (the application of Lab 8 with its Dockerfile, Kubernetes files and Jenkinsfile) |
-| 22 | https://github.com/YosraMamdouh/ivolve-shared-library (the shared libraries) |
+| 21, 22, 23 | https://github.com/YosraMamdouh/Ivolve-app-cicd (the application of Lab 8 with its Dockerfile, Kubernetes files and Jenkinsfile) |
+| 22, 23 | https://github.com/YosraMamdouh/ivolve-shared-library (the shared libraries) |
 
 Each lab folder contains the files used in that lab, copied from these repositories. Labs 9 to 20 are done with commands, manifests and settings written for the lab, so they have no source repository.
 
