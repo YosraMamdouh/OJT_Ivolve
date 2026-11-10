@@ -1,0 +1,89 @@
+---
+- name: Install Docker, kubectl and Jenkins
+  hosts: managed
+  become: true
+
+  vars:
+    kubectl_version: v1.30.0
+    jenkins_port: 8090
+
+  tasks:
+    # ---------- Docker ----------
+    - name: Install Docker
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+        update_cache: true
+
+    - name: Start and enable the Docker service
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    # ---------- kubectl ----------
+    - name: Download kubectl
+      ansible.builtin.get_url:
+        url: "https://dl.k8s.io/release/{{ kubectl_version }}/bin/linux/amd64/kubectl"
+        checksum: "sha256:https://dl.k8s.io/release/{{ kubectl_version }}/bin/linux/amd64/kubectl.sha256"
+        dest: /usr/local/bin/kubectl
+        mode: "0755"
+
+    # ---------- Jenkins ----------
+    - name: Install Java (needed by Jenkins)
+      ansible.builtin.apt:
+        name: openjdk-21-jre
+        state: present
+
+    - name: Add the Jenkins repository key
+      ansible.builtin.get_url:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key
+        dest: /usr/share/keyrings/jenkins-keyring.asc
+        mode: "0644"
+        force: true
+
+    - name: Add the Jenkins repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/"
+        filename: jenkins
+        state: present
+
+    - name: Install Jenkins
+      ansible.builtin.apt:
+        name: jenkins
+        state: present
+        update_cache: true
+
+    - name: Create the systemd override directory for Jenkins
+      ansible.builtin.file:
+        path: /etc/systemd/system/jenkins.service.d
+        state: directory
+        mode: "0755"
+
+    - name: Change the Jenkins port (8080 is used by the Jenkins of the other labs)
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/jenkins.service.d/override.conf
+        content: |
+          [Service]
+          Environment="JENKINS_PORT={{ jenkins_port }}"
+        mode: "0644"
+      notify: Restart Jenkins
+
+    - name: Reset the failed state of the Jenkins service (if a previous start failed)
+      ansible.builtin.command: systemctl reset-failed jenkins
+      changed_when: false
+      failed_when: false
+
+    - name: Start and enable the Jenkins service
+      ansible.builtin.systemd:
+        name: jenkins
+        state: started
+        enabled: true
+        daemon_reload: true
+
+  handlers:
+    - name: Restart Jenkins
+      ansible.builtin.systemd:
+        name: jenkins
+        state: restarted
+        daemon_reload: true
