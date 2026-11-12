@@ -1,0 +1,2 @@
+# The password that unlocks the vault must never be committed
+.vault_pass

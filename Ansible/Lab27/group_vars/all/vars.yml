@@ -1,0 +1,7 @@
+---
+# Non-sensitive settings
+mysql_db_name: ivolve
+mysql_db_user: ivolveuser
+
+# The password comes from the encrypted file group_vars/all/vault.yml
+mysql_db_password: "{{ vault_db_password }}"

@@ -1,0 +1,9 @@
+---
+mysql_db_name: ivolve
+mysql_db_user: ivolveuser
+mysql_user_host: localhost
+mysql_socket: /var/run/mysqld/mysqld.sock
+# Port 3306 is already used on this machine (the two WSL distributions share one network),
+# so MySQL listens on another port. Ansible connects through the socket, so this does not matter to it.
+mysql_port: 3307
+# mysql_db_password has no default on purpose: it must come from the vault

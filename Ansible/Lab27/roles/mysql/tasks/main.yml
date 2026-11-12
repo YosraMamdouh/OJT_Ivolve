@@ -1,0 +1,51 @@
+---
+# The settings are written before the installation: the package starts MySQL
+# at the end of the installation, and it fails if the port is already used.
+- name: Create the MySQL configuration directory
+  ansible.builtin.file:
+    path: /etc/mysql/mysql.conf.d
+    state: directory
+    mode: "0755"
+
+- name: Set the MySQL port
+  ansible.builtin.copy:
+    dest: /etc/mysql/mysql.conf.d/99-ivolve.cnf
+    content: |
+      [mysqld]
+      port = {{ mysql_port }}
+      mysqlx = OFF
+    mode: "0644"
+
+- name: Finish any package configuration that failed before
+  ansible.builtin.command: dpkg --configure -a
+  changed_when: false
+
+- name: Install MySQL server and the Python MySQL library used by the Ansible modules
+  ansible.builtin.apt:
+    name:
+      - mysql-server
+      - python3-pymysql
+    state: present
+    update_cache: true
+
+- name: Start and enable the MySQL service
+  ansible.builtin.service:
+    name: mysql
+    state: started
+    enabled: true
+
+- name: Create the database
+  community.mysql.mysql_db:
+    name: "{{ mysql_db_name }}"
+    state: present
+    login_unix_socket: "{{ mysql_socket }}"
+
+- name: Create the user with all privileges on the database
+  community.mysql.mysql_user:
+    name: "{{ mysql_db_user }}"
+    host: "{{ mysql_user_host }}"
+    password: "{{ mysql_db_password }}"
+    priv: "{{ mysql_db_name }}.*:ALL"
+    state: present
+    login_unix_socket: "{{ mysql_socket }}"
+  no_log: true   # keeps the password out of the output and logs

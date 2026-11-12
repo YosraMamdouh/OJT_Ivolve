@@ -1,0 +1,23 @@
+---
+- name: Install MySQL and create the database and the user
+  hosts: managed
+  become: true
+
+  roles:
+    - mysql
+
+  post_tasks:
+    # Connect as the new user (not as root) and list the databases
+    - name: List the databases as the new user
+      community.mysql.mysql_query:
+        login_user: "{{ mysql_db_user }}"
+        login_password: "{{ mysql_db_password }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        query: SHOW DATABASES
+      register: databases
+      tags: validate
+
+    - name: Show the databases
+      ansible.builtin.debug:
+        msg: "{{ databases.query_result[0] | map(attribute='Database') | list }}"
+      tags: validate
